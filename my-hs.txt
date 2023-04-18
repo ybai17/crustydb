@@ -1,0 +1,18 @@
+The milestone took about a week and a half of work. One portion of the work that took some extra time to figure out was how to
+implement the Iterator data structure for the heapfile. Storing the data in the form of a Vec of tuples and sorting the page ids
+before iterating through them proved to be helpful and made accessing things during iterating easier. 
+
+It also took some time to figure out the borrowing and locking mechanisms for referencing the hashmaps and file paths within
+the various StorageManager’s functions. Initially, I tried to use RefCell borrow’s, which worked for the most part.
+However, later on when work was started on the QO milestone, the compiler stated that that method was not thread-safe.
+As a result, I switched back to the Arc<RwLock> method for referencing the hashmaps in the data structure when reading/writing
+to the data structure. 
+
+The initial submission for Heapstore had some issues with the shutdown test and the benchmark tests. In this resubmission,
+the shutdown issue was fixed by using the storage_path as a directory instead of as a single file.
+
+In order to improve the performance on the benchmarks, the way the Page stored data was changed.
+Previously, blank slots were merged together one at a time; moving multiples of them at once greatly improved the speed
+at which Page operated. Previously, the Page contained a Vec that stored ALL slots, whether or not they were used or not,
+along with a Hashmap that stored all USED slots. By changing Page so that it now stored used and blank slots separately,
+there would overall be less to loop through, and in scenarios with more data, this would improve efficiency overall.

@@ -1,0 +1,17 @@
+For HashJoin, there is a possibility for a table to have tuples with duplicate key values, so for the implementation using HashMaps,
+the value type is a vector of tuples. This may impact the performance for simple cases. 
+The schema functionality ended up not being used; there was no source for generating the TableSchema source data.
+In order to pass the tests, I looked at the data types in the schema tests and generated a simple int data type for the test schema
+columns. Ideally the implementation would also check the inputs for strings, but I focused primarily on correctness and performance
+of the data joining. 
+
+I spent about a week on the milestone as a whole. The majority of the time was spent on figuring out the design of the Aggregator
+and Aggregate structs and their implementation. Ideally, I would have liked to have spent more time on figuring out how to
+better optimize the performance of the milestone on the benchmark tests.
+
+There seems to be a bug of some kind with my heapfile/storemanager implementation that prevents it from working properly
+with the e2ebenchmark tests. As a result, I switched to using memstore for the benchmark tests, which work properly for the most part.
+
+Also, just to note: I accidentally uploaded a memstore submission to the non-memstore Autograder on Gradescope,
+so please disregard that submission. This is a submission that uses memstore, and will be uploaded to the correct one on Gradescope.
+
